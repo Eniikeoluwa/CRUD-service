@@ -73,6 +73,7 @@ exports.sanitizeInput = (input) => {
   return {
     username: validator.escape(input.username || ''),
     email: validator.normalizeEmail(input.email || ''),
-    password: input.password // Do not modify password for hashing
+    password: input.password,// Do not modify password for hashing
+    role: input.role
   };
 };

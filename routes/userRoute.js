@@ -1,54 +1,62 @@
-// const express = require('express');
-// const userController = require('../controllers/userController');
-// const authController = require('../controllers/authController');
+// const express = require("express");
+// const userController = require("../controllers/userController");
+// const authController = require("../controllers/authController");
 
 // const router = express.Router();
 
 // // Test route (unprotected)
-// router.get('/test', (req, res) => {
+// router.get("/test", (req, res) => {
 //   res.status(200).json({
-//     status: 'success',
-//     message: 'User routes are working'
+//     status: "success",
+//     message: "User routes are working",
 //   });
 // });
 
 // // Current user routes
-// router.get('/me', authController.protect, userController.getCurrentUser);
-// router.patch('/updateMe', authController.protect, userController.updateCurrentUser);
-// router.delete('/deleteMe', authController.protect, userController.deleteCurrentUser);
+// router.get("/me", authController.protect, userController.getCurrentUser);
+// router.patch(
+//   "/updateMe",
+//   authController.protect,
+//   userController.updateCurrentUser
+// );
+// router.delete(
+//   "/deleteMe",
+//   authController.protect,
+//   userController.deleteCurrentUser
+// );
 
 // // Admin routes
-// router.get('/', authController.protect, userController.getAllUsers);
-// router.get('/:id', authController.protect, userController.getUserById);
-// router.patch('/:id', authController.protect, userController.updateUser);
-// router.delete('/:id', authController.protect, userController.deleteUser);
+// router.get("/", authController.protect, userController.getAllUsers);
+// router.get("/:id", authController.protect, userController.getUserById);
+// router.patch("/:id", authController.protect, userController.updateUser);
+// router.delete("/:id", authController.protect, userController.deleteUser);
 
-// module.exports = router;
+// module.exports = router; // ✅ Now correctly exporting the router
 
 
-const express = require('express');
-const userController = require('../controllers/userController');
-const authController = require('../controllers/authController');
+const express = require("express");
+const userController = require("../controllers/userController");
+const authController = require("../controllers/authController");
 
 const router = express.Router();
 
 // Test route (unprotected)
-router.get('/test', (req, res) => {
+router.get("/test", (req, res) => {
   res.status(200).json({
-    status: 'success',
-    message: 'User routes are working',
+    status: "success",
+    message: "User routes are working",
   });
 });
 
 // Current user routes
-router.get('/me', authController.protect, userController.getCurrentUser);
-router.patch('/updateMe', authController.protect, userController.updateCurrentUser);
-router.delete('/deleteMe', authController.protect, userController.deleteCurrentUser);
+router.get("/me", authController.protect, userController.getCurrentUser);
+router.patch("/updateMe", authController.protect, userController.updateCurrentUser);
+router.delete("/deleteMe", authController.protect, userController.deleteCurrentUser);
 
-// Admin routes
-router.get('/', authController.protect, userController.getAllUsers);
-router.get('/:id', authController.protect, userController.getUserById);
-router.patch('/:id', authController.protect, userController.updateUser);
-router.delete('/:id', authController.protect, userController.deleteUser);
+// Admin routes (restricted to admin users)
+router.get("/", authController.protect, authController.restrictTo("admin"), userController.getAllUsers);
+router.get("/:id", authController.protect, authController.restrictTo("admin"), userController.getUserById);
+router.patch("/:id", authController.protect, authController.restrictTo("admin"), userController.updateUser);
+router.delete("/:id", authController.protect, authController.restrictTo("admin"), userController.deleteUser);
 
-module.exports = router; // ✅ Now correctly exporting the router
+module.exports = router;
