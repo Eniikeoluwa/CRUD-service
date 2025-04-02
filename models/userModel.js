@@ -21,23 +21,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
-    select: false, // Hide password in queries by default
+    select: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
 });
 
-// 🔒 Hash password before saving to database
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next(); // Prevent rehashing on updates
+  if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
-// 🔑 Compare passwords for login
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
